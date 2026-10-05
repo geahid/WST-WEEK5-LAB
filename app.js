@@ -1,93 +1,72 @@
-// ==============================
-// Task 1 — Interactive Counter
-// ==============================
+// ==========================================
+// Task 1 — Wire it up and prove it runs
+// ==========================================
 
-let count = 0;
+const name = "Geahid";
 
-const number = document.getElementById("number");
-const increase = document.getElementById("increase");
-const decrease = document.getElementById("decrease");
+const greeting = `Hello, ${name}!`;
 
-increase.addEventListener("click", function () {
-    count++;
-    number.textContent = count;
-});
+console.log(greeting);
 
-decrease.addEventListener("click", function () {
-    if (count > 0) {
-        count--;
-        number.textContent = count;
-    }
-});
+// Error caused during testing: SyntaxError
 
 
-// ==============================
-// Task 2 — Mini To-Do List
-// ==============================
+// ==========================================
+// Task 2 — A grade reporter
+// ==========================================
 
-const todoInput = document.getElementById("todoInput");
-const addTodo = document.getElementById("addTodo");
-const todoList = document.getElementById("todoList");
+let score = 88;
 
-addTodo.addEventListener("click", function () {
-    const text = todoInput.value.trim();
-
-    if (text === "") {
-        return;
-    }
-
-    const li = document.createElement("li");
-
-    li.textContent = text;
-
-    todoList.appendChild(li);
-
-    todoInput.value = "";
-});
-
-
-// Bonus: Remove a to-do item when clicked
-
-todoList.addEventListener("click", function (event) {
-    if (event.target.tagName === "LI") {
-        event.target.remove();
-    }
-});
-
-
-// ==============================
-// Task 3 — Fetch Users
-// ==============================
-
-async function loadUsers() {
-    const userList = document.getElementById("userList");
-    const userMessage = document.getElementById("userMessage");
-
-    try {
-        const response = await fetch(
-            "https://jsonplaceholder.typicode.com/users"
-        );
-
-        if (!response.ok) {
-            throw new Error("Failed to load users.");
-        }
-
-        const users = await response.json();
-
-        userList.innerHTML = "";
-
-        users.forEach(function (user) {
-            const li = document.createElement("li");
-
-            li.textContent = user.name;
-
-            userList.appendChild(li);
-        });
-
-        userMessage.textContent = "Users loaded successfully.";
-    } catch (error) {
-        userMessage.textContent = "Failed to load users.";
-    }
+if (score >= 90) {
+    console.log("Excellent");
+} else if (score >= 75) {
+    console.log("Passed");
+} else {
+    console.log("Needs improvement");
 }
 
-loadUsers();
+// Ternary: true when the score is 75 or higher
+console.log(`Passed: ${score >= 75}`);
+
+
+// Test values: 95, 88, 75, 74, and 0
+
+const testScores = [95, 88, 75, 74, 0];
+
+testScores.forEach(function (score) {
+    if (score >= 90) {
+        console.log(score, "Excellent");
+    } else if (score >= 75) {
+        console.log(score, "Passed");
+    } else {
+        console.log(score, "Needs improvement");
+    }
+
+    console.log(`Passed: ${score >= 75}`);
+});
+
+
+// ==========================================
+// Task 3 — Reproduce the coercion bug
+// ==========================================
+
+const qty = "5";
+const price = 20;
+
+console.log(qty + price);
+
+// Because qty is a string, + joins the values as text.
+// The result is "520", not 100.
+
+const total = Number(qty) * price;
+
+console.log(total);
+
+// == allows type coercion, so this is true.
+console.log(qty == 5);
+
+// === checks both value and type, so this is false.
+console.log(qty === 5);
+
+// Use === because it checks both the value and the data type
+// and avoids unexpected type coercion.

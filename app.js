@@ -1,72 +1,179 @@
 // ==========================================
-// Task 1 — Wire it up and prove it runs
+// Task 1 — A reusable function
 // ==========================================
 
-const name = "Geahid";
-
-const greeting = `Hello, ${name}!`;
-
-console.log(greeting);
-
-// Error caused during testing: SyntaxError
-
-
-// ==========================================
-// Task 2 — A grade reporter
-// ==========================================
-
-let score = 88;
-
-if (score >= 90) {
-    console.log("Excellent");
-} else if (score >= 75) {
-    console.log("Passed");
-} else {
-    console.log("Needs improvement");
+function transmute(score) {
+    if (score >= 90) {
+        return "Excellent";
+    } else if (score >= 75) {
+        return "Passed";
+    } else {
+        return "Needs improvement";
+    }
 }
 
-// Ternary: true when the score is 75 or higher
-console.log(`Passed: ${score >= 75}`);
+console.log(transmute(95));
+console.log(transmute(88));
+console.log(transmute(75));
+console.log(transmute(74));
+console.log(transmute(0));
 
 
-// Test values: 95, 88, 75, 74, and 0
+// Arrow function version
 
-const testScores = [95, 88, 75, 74, 0];
-
-testScores.forEach(function (score) {
+const transmuteArrow = (score) => {
     if (score >= 90) {
-        console.log(score, "Excellent");
+        return "Excellent";
     } else if (score >= 75) {
-        console.log(score, "Passed");
+        return "Passed";
     } else {
-        console.log(score, "Needs improvement");
+        return "Needs improvement";
     }
+};
 
-    console.log(`Passed: ${score >= 75}`);
-});
+console.log(transmuteArrow(95));
+console.log(transmuteArrow(88));
+console.log(transmuteArrow(75));
+console.log(transmuteArrow(74));
+console.log(transmuteArrow(0));
+
+
+// Confirm both versions give the same results
+
+console.log(
+    transmute(95) === transmuteArrow(95)
+);
+
+console.log(
+    transmute(88) === transmuteArrow(88)
+);
+
+console.log(
+    transmute(75) === transmuteArrow(75)
+);
+
+console.log(
+    transmute(74) === transmuteArrow(74)
+);
+
+console.log(
+    transmute(0) === transmuteArrow(0)
+);
 
 
 // ==========================================
-// Task 3 — Reproduce the coercion bug
+// Task 2 — Work a class list
 // ==========================================
 
-const qty = "5";
-const price = 20;
+const classList = [
+    {
+        name: "Ana",
+        score: 88,
+        section: "3-A"
+    },
+    {
+        name: "Ben",
+        score: 92,
+        section: "3-B"
+    },
+    {
+        name: "Carla",
+        score: 74,
+        section: "3-A"
+    },
+    {
+        name: "Daniel",
+        score: 81,
+        section: "3-B"
+    },
+    {
+        name: "Ella",
+        score: 70,
+        section: "3-A"
+    }
+];
 
-console.log(qty + price);
 
-// Because qty is a string, + joins the values as text.
-// The result is "520", not 100.
+// All names — map
 
-const total = Number(qty) * price;
+const allNames = classList.map(student => student.name);
 
-console.log(total);
+console.log("All names:", allNames);
 
-// == allows type coercion, so this is true.
-console.log(qty == 5);
 
-// === checks both value and type, so this is false.
-console.log(qty === 5);
+// Only students who passed — filter
 
-// Use === because it checks both the value and the data type
-// and avoids unexpected type coercion.
+const passedStudents = classList.filter(
+    student => student.score >= 75
+);
+
+console.log("Passed students:", passedStudents);
+
+
+// Section 3-A — filter then map
+
+const section3A = classList
+    .filter(student => student.section === "3-A")
+    .map(student => `${student.name} — ${student.score}%`);
+
+console.log("Section 3-A:", section3A);
+
+
+// Class average — reduce and toFixed(2)
+
+const totalScore = classList.reduce(
+    (total, student) => total + student.score,
+    0
+);
+
+const classAverage = (
+    totalScore / classList.length
+).toFixed(2);
+
+console.log("Class average:", classAverage);
+
+
+// Prove original array is unchanged
+
+console.log("Original class list:", classList);
+
+
+// ==========================================
+// Task 3 — Prove the reference trap
+// ==========================================
+
+// This does NOT create a new array.
+// Both variables point to the same array.
+
+const copy = classList;
+
+copy[0].score = 100;
+
+console.log("Original after changing copy:", classList);
+
+// The original changed because copy and classList
+// refer to the same array and the same student objects.
+
+
+// Restore the original score for the rest of the demonstration.
+
+classList[0].score = 88;
+
+
+// Proper independent copy
+
+const protectedCopy = classList.map(student => ({
+    ...student
+}));
+
+protectedCopy[0].score = 100;
+
+console.log("Protected copy:", protectedCopy);
+
+console.log(
+    "Original after changing protected copy:",
+    classList
+);
+
+// const prevents reassignment of the variable name,
+// but it does not make the array or its objects immutable.
